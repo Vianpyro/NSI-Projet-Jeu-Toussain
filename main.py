@@ -21,8 +21,12 @@ class Game:
         Création d'une nouvelle partie
         """
         self.all_sprites = pg.sprite.Group()                    # Création d'un groupe contenant toutes les instances d'objets
+        self.platforms = pg.sprite.Group()
         self.player = Player()                                  # Création du joueur
-        self.all_sprites.add(self.player)                       # Ajout du joueur dans le groupe
+        p1 = Platform(0, HEIGHT - 25, WIDTH, 25)
+        self.all_sprites.add(self.player)                       # Ajout du joueur dans le groupe d'objets
+        self.all_sprites.add(p1)
+        self.platforms.add(p1)
         self.run()                                              # Lancement de la partie
 
     def run(self):
@@ -41,7 +45,12 @@ class Game:
         """
         Met a jour tout ce qui est affiché (mouvement, apparence etc...)
         """
-        self.all_sprites.update()                               # Met a jour les instances d'objets
+        self.all_sprites.update()                                           # Met a jour les instances d'objets
+        # hits = pg.sprite.spritecollide(self.player, self.platforms, False)  # Detecte la collision entre le joueur et les plateformes (False = sans les supprimer)
+        hits = pg.sprite.spritecollide(self.player, self.platforms, False)
+        if hits:
+            self.player.position.y = hits[0].rect.top
+            self.player.velocity.y = 0
 
     def events(self):
         """
