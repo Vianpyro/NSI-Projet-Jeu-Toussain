@@ -1,5 +1,6 @@
-# Game window's settings
-WIDTH = 512
+# Game display settings
+FPS = 60
+WIDTH = 720
 HEIGHT = 480
 GAME_TITLE = "Plateformer"
 
@@ -19,4 +20,4 @@ GRID_WIDTH = WIDTH / TILE_SIZE
 GRID_HEIGHT = HEIGHT / TILE_SIZE
 
 # Player settings
-PLAYER_SPEED = 250
+PLAYER_SPEED = 10
