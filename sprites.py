@@ -3,8 +3,9 @@ import pygame as pg
 vec = pg.math.Vector2                               # Création d'une variable de type "vecteur en deux dimensions"
 
 class Player(pg.sprite.Sprite):                     # Création de la classe joueur "enfant" de "sprite"
-    def __init__(self):
+    def __init__(self, game):
         pg.sprite.Sprite.__init__(self)             # Initialisation de la classe superieur "sprite"
+        self.game = game
         self.image = pg.Surface((50, 50))           # Définition de la surface de mon objet (joueur)
         self.image.fill(RED)                        # Coloriage de la surface définie
         self.rect = self.image.get_rect()           # Sauvegarde de la surface occupée par mon objet
@@ -32,6 +33,13 @@ class Player(pg.sprite.Sprite):                     # Création de la classe jou
             self.position.x = WIDTH
 
         self.rect.midbottom = self.position         # Affichage du joueur à sa position
+
+    def jump(self):
+        self.rect.x += 1
+        hits = pg.sprite.spritecollide(self, self.game.platforms, False)
+        self.rect.x -= 1
+        if hits:
+            self.velocity.y = -20
 
 
 class Platform(pg.sprite.Sprite):

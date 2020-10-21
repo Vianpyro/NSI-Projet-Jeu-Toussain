@@ -22,7 +22,7 @@ class Game:
         """
         self.all_sprites = pg.sprite.Group()                    # Création d'un groupe contenant toutes les instances d'objets
         self.platforms = pg.sprite.Group()
-        self.player = Player()                                  # Création du joueur
+        self.player = Player(self)                              # Création du joueur
         p1 = Platform(0, HEIGHT - 25, WIDTH, 25)
         self.all_sprites.add(self.player)                       # Ajout du joueur dans le groupe d'objets
         self.all_sprites.add(p1)
@@ -60,6 +60,9 @@ class Game:
                 if self.playing:                                
                     self.playing = False                        # Arrête la partie si elle est en cours
                 self.running = False                            # Arrête le jeu
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_SPACE:
+                    self.player.jump()
 
     def draw(self):
         """
