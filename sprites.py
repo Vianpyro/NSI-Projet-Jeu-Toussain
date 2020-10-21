@@ -14,7 +14,7 @@ class Player(pg.sprite.Sprite):                     # Création de la classe jou
         self.acceleration = vec(0, 0)               # Définition de l'accélération du joueur a 0x 0y
 
     def update(self):
-        self.acceleration = vec(0, 0.5)             # A chaque update (frame) on remet la velocité a 0
+        self.acceleration = vec(0, GRAVITY)         # A chaque update (frame) on remet l'acceleration laterale a 0 et on ajoute la gravite
         keys = pg.key.get_pressed()                 # Sauvegarde de touches enfoncées par le joueur dans une liste (type set)
         if keys[pg.K_LEFT]:
             self.acceleration.x = -PLAYER_ACCELERATION

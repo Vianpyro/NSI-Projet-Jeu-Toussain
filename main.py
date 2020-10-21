@@ -46,8 +46,7 @@ class Game:
         Met a jour tout ce qui est affiché (mouvement, apparence etc...)
         """
         self.all_sprites.update()                                           # Met a jour les instances d'objets
-        # hits = pg.sprite.spritecollide(self.player, self.platforms, False)  # Detecte la collision entre le joueur et les plateformes (False = sans les supprimer)
-        hits = pg.sprite.spritecollide(self.player, self.platforms, False)
+        hits = pg.sprite.spritecollide(self.player, self.platforms, False)  # Detecte la collision entre le joueur et les plateformes (False = sans les supprimer)
         if hits:
             self.player.position.y = hits[0].rect.top
             self.player.velocity.y = 0
