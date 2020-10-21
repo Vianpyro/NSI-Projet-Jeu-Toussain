@@ -1,5 +1,6 @@
 from settings import *
 import pygame as pg
+
 vec = pg.math.Vector2                               # Création d'une variable de type "vecteur en deux dimensions"
 
 class Player(pg.sprite.Sprite):                     # Création de la classe joueur "enfant" de "sprite"
@@ -15,12 +16,14 @@ class Player(pg.sprite.Sprite):                     # Création de la classe jou
         self.acceleration = vec(0, 0)               # Définition de l'accélération du joueur a 0x 0y
 
     def update(self):
-        self.acceleration = vec(0, GRAVITY)         # A chaque update (frame) on remet l'acceleration laterale a 0 et on ajoute la gravite
-        keys = pg.key.get_pressed()                 # Sauvegarde de touches enfoncées par le joueur dans une liste (type set)
-        if keys[pg.K_LEFT]:
+        self.acceleration = vec(0, GRAVITY)             # A chaque update (frame) on remet l'acceleration laterale a 0 et on ajoute la gravite
+        keys = pg.key.get_pressed()                     # Sauvegarde de touches enfoncées par le joueur dans une liste (type set)
+        if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.acceleration.x = -PLAYER_ACCELERATION
-        if keys[pg.K_RIGHT]:
+        if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.acceleration.x = PLAYER_ACCELERATION
+        if keys[pg.K_SPACE]:
+            self.jump()
             
         self.acceleration.x += self.velocity.x * PLAYER_FRICTION    # Application de la friction au mouvement lateral ; plus on va vite plus on est freiné
         self.velocity += self.acceleration                          # Mouvement de l'objet selon son accélération
@@ -35,11 +38,9 @@ class Player(pg.sprite.Sprite):                     # Création de la classe jou
         self.rect.midbottom = self.position         # Affichage du joueur à sa position
 
     def jump(self):
-        self.rect.x += 1
+        # Vérification que le joueur est bien sur une platforme pour sauter
         hits = pg.sprite.spritecollide(self, self.game.platforms, False)
-        self.rect.x -= 1
-        if hits:
-            self.velocity.y = -20
+        if hits: self.velocity.y = -25 * (1 - GRAVITY)
 
 
 class Platform(pg.sprite.Sprite):

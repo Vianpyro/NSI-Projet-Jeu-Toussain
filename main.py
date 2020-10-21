@@ -60,9 +60,6 @@ class Game:
                 if self.playing:                                
                     self.playing = False                        # Arrête la partie si elle est en cours
                 self.running = False                            # Arrête le jeu
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
-                    self.player.jump()
 
     def draw(self):
         """
