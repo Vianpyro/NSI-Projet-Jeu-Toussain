@@ -1,8 +1,9 @@
 from settings import *
 from sprites import *
-import sys
 import pygame as pg
+from random import randint
 from os import environ
+import sys
 
 class Game:
     def __init__(self):
@@ -50,6 +51,37 @@ class Game:
         if hits:
             self.player.position.y = hits[0].rect.top
             self.player.velocity.y = 0
+
+        if self.player.position.x >= (2 * WIDTH) / 3:                       # Test si le joueur est a 2/3 de l'écran
+            player_velocity = abs(self.player.velocity.x)                   # Sauvegarde la valeur absolue de la vélocité du joueur
+            self.player.position.x -= player_velocity                       # Ajoute cette valeur a la "camera" pour avancer fluidement 
+            for p in self.platforms:                                        # Vérification de chaque plateforme
+                p.rect.x -= int(player_velocity)                            # Déplacement fluide de la plateforme
+                if p.rect.right <= 0:                                       # Si elle est en dehors du champ de vision on la supprime
+                    p.kill()
+
+        # Apparition de nouvelles plateformes
+        while len(self.platforms) <= 10:
+            p = Platform(                                                       # Création d'une nouvelle plateforme
+                randint(WIDTH, WIDTH * 3),
+                randint(
+                    min(
+                        int(self.player.position.y + PLATFORM_HEIGHT),
+                        HEIGHT - PLATFORM_HEIGHT
+                    ),
+                    max(
+                        int(self.player.position.y + PLATFORM_HEIGHT),
+                        HEIGHT - PLATFORM_HEIGHT
+                    )
+                ),
+                randint(
+                    PLATFORM_HEIGHT * 2, 
+                    PLATFORM_HEIGHT * 3
+                ), PLATFORM_HEIGHT
+            )
+
+            self.platforms.add(p)
+            self.all_sprites.add(p)
 
     def events(self):
         """

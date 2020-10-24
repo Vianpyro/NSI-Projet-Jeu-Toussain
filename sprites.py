@@ -5,24 +5,24 @@ vec = pg.math.Vector2                               # Création d'une variable d
 
 class Player(pg.sprite.Sprite):                     # Création de la classe joueur "enfant" de "sprite"
     def __init__(self, game):
-        pg.sprite.Sprite.__init__(self)             # Initialisation de la classe superieur "sprite"
-        self.game = game
-        self.image = pg.Surface((50, 50))           # Définition de la surface de mon objet (joueur)
-        self.image.fill(RED)                        # Coloriage de la surface définie
-        self.rect = self.image.get_rect()           # Sauvegarde de la surface occupée par mon objet
-        self.rect.center = (WIDTH / 2, HEIGHT / 2)  # Centrage du joueur dans la fenêtre
-        self.position = vec(WIDTH / 2, HEIGHT / 2)  # Centrage de la position du joueur dans la fenêtre
-        self.velocity = vec(0, 0)                   # Définition de la vélocité du joueur a 0x 0y
-        self.acceleration = vec(0, 0)               # Définition de l'accélération du joueur a 0x 0y
+        pg.sprite.Sprite.__init__(self)                 # Initialisation de la classe superieur "sprite"
+        self.game = game    
+        self.image = pg.Surface((50, PLAYER_HEIGHT))    # Définition de la surface de mon objet (joueur)
+        self.image.fill(RED)                            # Coloriage de la surface définie
+        self.rect = self.image.get_rect()               # Sauvegarde de la surface occupée par mon objet
+        self.rect.center = (WIDTH / 2, HEIGHT / 2)      # Centrage du joueur dans la fenêtre
+        self.position = vec(WIDTH / 2, HEIGHT / 2)      # Centrage de la position du joueur dans la fenêtre
+        self.velocity = vec(0, 0)                       # Définition de la vélocité du joueur a 0x 0y
+        self.acceleration = vec(0, 0)                   # Définition de l'accélération du joueur a 0x 0y
 
     def update(self):
         self.acceleration = vec(0, GRAVITY)             # A chaque update (frame) on remet l'acceleration laterale a 0 et on ajoute la gravite
         keys = pg.key.get_pressed()                     # Sauvegarde de touches enfoncées par le joueur dans une liste (type set)
-        if keys[pg.K_LEFT] or keys[pg.K_a]:
+        if (keys[pg.K_LEFT] or keys[pg.K_a]):
             self.acceleration.x = -PLAYER_ACCELERATION
-        if keys[pg.K_RIGHT] or keys[pg.K_d]:
+        if (keys[pg.K_RIGHT] or keys[pg.K_d]):
             self.acceleration.x = PLAYER_ACCELERATION
-        if keys[pg.K_SPACE]:
+        if (keys[pg.K_SPACE] or keys[pg.K_UP]):
             self.jump()
             
         self.acceleration.x += self.velocity.x * PLAYER_FRICTION    # Application de la friction au mouvement lateral ; plus on va vite plus on est freiné
@@ -40,7 +40,7 @@ class Player(pg.sprite.Sprite):                     # Création de la classe jou
     def jump(self):
         # Vérification que le joueur est bien sur une platforme pour sauter
         hits = pg.sprite.spritecollide(self, self.game.platforms, False)
-        if hits: self.velocity.y = -25 * (1 - GRAVITY)
+        if hits: self.velocity.y = -PLATFORM_HEIGHT * (1 - GRAVITY)
 
 
 class Platform(pg.sprite.Sprite):
