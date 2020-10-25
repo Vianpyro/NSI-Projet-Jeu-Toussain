@@ -18,11 +18,11 @@ class Player(pg.sprite.Sprite):                     # Création de la classe jou
     def update(self):
         self.acceleration = vec(0, GRAVITY)             # A chaque update (frame) on remet l'acceleration laterale a 0 et on ajoute la gravite
         keys = pg.key.get_pressed()                     # Sauvegarde de touches enfoncées par le joueur dans une liste (type set)
-        if (keys[pg.K_LEFT] or keys[pg.K_a]):
+        if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.acceleration.x = -PLAYER_ACCELERATION
-        if (keys[pg.K_RIGHT] or keys[pg.K_d]):
+        if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.acceleration.x = PLAYER_ACCELERATION
-        if (keys[pg.K_SPACE] or keys[pg.K_UP]):
+        if keys[pg.K_SPACE] or keys[pg.K_UP]:
             self.jump()
             
         self.acceleration.x += self.velocity.x * PLAYER_FRICTION    # Application de la friction au mouvement lateral ; plus on va vite plus on est freiné
@@ -40,12 +40,13 @@ class Player(pg.sprite.Sprite):                     # Création de la classe jou
     def jump(self):
         # Vérification que le joueur est bien sur une platforme pour sauter
         hits = pg.sprite.spritecollide(self, self.game.platforms, False)
-        if hits: self.velocity.y = -PLATFORM_HEIGHT * (1 - GRAVITY)
+        if hits: self.velocity.y = -PLAYER_JUMP * (1 - GRAVITY)
 
 
 class Platform(pg.sprite.Sprite):
     def __init__(self, x, y, width, height):
         pg.sprite.Sprite.__init__(self)             # Initialisation de la classe superieur "sprite"
+        self.width = width                          # Sauvegarde de la largeur de la platforme
         self.image = pg.Surface((width, height))    # Définition de la surface de mon objet (Platform)
         self.image.fill(WHITE)                      # Coloriage de la surface définie
         self.rect = self.image.get_rect()           # Sauvegarde de la surface occupée par mon objet
