@@ -16,6 +16,7 @@ class Game:
         self.window = pg.display.set_mode((WIDTH, HEIGHT))      # Affichage de la fenêtre
         self.clock = pg.time.Clock()                            # Définition du chronomètre (pour suivre la fluidité du jeu)
         self.font_name = pg.font.match_font(FONT_NAME)          # Paramêtrage du font (style d'écriture)
+        self.load_hscore()                                      # Chargement (s'il existe) de l'highscore
         self.running = True                                     # Comprend que le jeu est lancé
 
     def new(self):
@@ -69,32 +70,34 @@ class Game:
         # Apparition de nouvelles plateformes
         while len(self.platforms) <= 10:
             p = Platform(                                                   # Création d'une nouvelle plateforme
-                randint(WIDTH, WIDTH * 2),
-                randint(
+                randint(WIDTH, WIDTH * 2),                                  # Coordonée sur l'axe des abscisses
+                randint(                                                    # Coordonée sur l'axe des ordonnées
                     min(
                         int(self.player.position.y + PLATFORM_HEIGHT),
                         HEIGHT - PLATFORM_HEIGHT
                     ),
                     max(
-                        int(self.player.position.y + PLATFORM_HEIGHT),
+                        int(self.player.position.y - PLATFORM_HEIGHT),
                         HEIGHT - PLATFORM_HEIGHT
                     )
                 ),
-                randint(
-                    PLATFORM_HEIGHT * 2, 
-                    PLATFORM_HEIGHT * 3
-                ), PLATFORM_HEIGHT
+                randint(                                                    
+                    PLATFORM_HEIGHT * 2, PLATFORM_HEIGHT * 3),              # Longeur maximum de la platforme
+                PLATFORM_HEIGHT                                             # Largeur de la platforme
             )
 
-            self.platforms.add(p)                                               # Ajout de la nouvelle platforme dans le groupe de plateformes
-            self.all_sprites.add(p)                                             # Ajout de la nouvelle platforme dans le groupe d'entitées
+            self.platforms.add(p)                                           # Ajout de la nouvelle platforme dans le groupe de plateformes
+            self.all_sprites.add(p)                                         # Ajout de la nouvelle platforme dans le groupe d'entitées
 
     def events(self):
         """
         Écoute des actions du joueur
         """
         for event in pg.event.get():                            # Écoute les evenements du joueur
-            if event.type == pg.QUIT:                           # Écoute si le joueur clique sur la croix "rouge" pour fermer le jeu
+            if event.type == pg.QUIT or (                       # Écoute si le joueur clique sur la croix "rouge" pour fermer le jeu
+                event.type == pg.KEYDOWN and
+                event.key == pg.K_ESCAPE                        # Écoute si le joueur presse "escape" pour fermer le jeu
+                ):                           
                 if self.playing:                                
                     self.playing = False                        # Arrête la partie si elle est en cours
                 self.running = False                            # Arrête le jeu
@@ -103,7 +106,7 @@ class Game:
         """
         Affichage de ce qui est a afficher
         """
-        self.window.fill(BLACK)                                 # Remplie tout l'écran de noir pour repartir d'une image de base
+        self.window.fill(BACKGROUD_COLOR)                                 # Remplie tout l'écran de noir pour repartir d'une image de base
         self.draw_text(                                         # Affichage du score
             f"Score : {max(self.score, 0)}",
             PLATFORM_HEIGHT, WHITE,
@@ -122,15 +125,86 @@ class Game:
         text_rect.midtop = (int(x), int(y))                     # Paramétrage de l'emplacement du texte
         self.window.blit(text_surface, text_rect)               # Affichage du texte
 
-    def show_start_screen(self): pass
+    def show_start_screen(self):
+        """
+        Fonction affichant l'écran de départ du jeu
+        """
+        self.window.fill(BACKGROUD_COLOR)                               # Remplissage de la fenêtre en noir
+        self.draw_text(GAME_TITLE, 64, WHITE, WIDTH / 2, HEIGHT / 4)    # Affichage du titre du jeu
+        self.draw_text(
+            "Utilisez les fleches pour bouger !", 32, WHITE, 
+            WIDTH / 2, HEIGHT / 2
+        )
+        self.draw_text(
+            "Traversez le bord gauche de l'ecran pour aller a droite.",
+            32, WHITE, WIDTH / 2, (HEIGHT / 2) + 32
+        )
+        self.draw_text(
+            f"Highscore : {self.highscore}", 32, WHITE, WIDTH / 2, 
+            (HEIGHT / 4) + 64
+        )
+        self.draw_text(
+            "Appuyez sur n'importe quelle touche pour jouer...", 32, 
+            WHITE, WIDTH / 2, (HEIGHT / 4) * 3
+        )
+        pg.display.flip()                                               # Flip pour afficher ce qui est a afficher
+        self.wait_for_key()                                             # Attente qu'une touche soit pressée pour finir la fonction
 
-    def show_game_over_screen(self): pass
+    def show_game_over_screen(self):
+        self.window.fill(BACKGROUD_COLOR)
+        self.draw_text("GAME OVER", 64, WHITE, WIDTH / 2, HEIGHT / 4)
+        self.draw_text(
+            f"Score : {max(self.score, 0)}", 32, WHITE, WIDTH / 2, 
+            HEIGHT / 2
+        )
+        self.draw_text(
+            f"Appuyez sur n'importe quelle touche pour rejouer...",
+            32, WHITE, WIDTH / 2, (HEIGHT / 4) * 3
+        )
+
+        if self.score > self.highscore:
+            self.highscore = self.score
+            self.draw_text(
+                f"Nouvel highscore : {self.score} !", 32, YELLOW, 
+                WIDTH / 2, (HEIGHT / 2) + 64
+            )
+            with open(SAVE_NAME, 'w') as f:
+                f.write(str(self.highscore))
+        else:
+            self.draw_text(
+                f"Highscore : {self.highscore}", 32, YELLOW, 
+                WIDTH / 2, (HEIGHT / 2) + 64
+            )
+
+        pg.display.flip()                                               # Flip pour afficher ce qui est a afficher
+        self.wait_for_key()                                             # Attente qu'une touche soit pressée pour finir la fonction
+
+
+    def wait_for_key(self):                                             # Définition de la fonction d'attente qu'une touche soit pressée
+        while True:
+            self.clock.tick(5)                                          # Rafraichissement ralenti (5 images/s)
+            for event in pg.event.get():
+                if event.type == pg.QUIT or (                           # Fermeture de la fenêtre si le joueur ne veut pas jouer
+                event.type == pg.KEYDOWN and
+                event.key == pg.K_ESCAPE
+                ):
+                    self.running = False
+                    return
+                if event.type == pg.KEYDOWN:                            # Fin de l'attente quand le joueur appuie sur une touche (sauf esc)
+                    return
+
+    def load_hscore(self):                                      # Chargement de l'highscore
+        try:
+            with open(SAVE_NAME, 'r') as f:                      # On essaye d'ouvrir le fichier
+                try: self.highscore = int(f.read())             # On prend l'highscore
+                except: self.highscore = 0                      # Ou on prend 0
+        except: self.highscore = 0                              # Si le fichier est introuvable on prend 0
 
 game = Game()                                                   # Création de l'instance game
 game.show_start_screen()                                        # Affichage de l'écran de départ
 
 while game.running:
     game.new()                                                  # Création et execution du jeu
-    game.show_game_over_screen()                                # Affichage de l'écran de fin
+    if game.running: game.show_game_over_screen()               # Affichage de l'écran de fin
 
 pg.quit()                                                       # Fermeture de la fenêtre

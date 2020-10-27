@@ -1,11 +1,15 @@
-# Game display settings
+# Fichier de sauvegarde
+SAVE_NAME = 'hscore'
+
+# Paramètres d'affichage
 FPS = 60
 WIDTH = 720
 HEIGHT = 480
-GAME_TITLE = "Plateformer"
+GAME_TITLE = "Cloud Jumper"
 FONT_NAME = "calibri"
+BACKGROUD_COLOR = (0, 200, 255)
 
-# Define some colors
+# Définition de couleurs
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
@@ -15,11 +19,11 @@ YELLOW = (255, 255, 0)
 DARK_GRAY = (50, 50, 50)
 LIGHT_GRAY = (150, 150, 150)
 
-# Game settings
+# Paramètres du jeu
 GRAVITY = 0.5
 PLATFORM_HEIGHT = 25
 
-# Player settings
+# Paramètres du joueur
 PLAYER_JUMP = 25
 PLAYER_HEIGHT = 50
 PLAYER_ACCELERATION = 0.5
