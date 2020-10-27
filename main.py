@@ -69,11 +69,7 @@ class Game:
         # Apparition de nouvelles plateformes
         while len(self.platforms) <= 10:
             p = Platform(                                                   # Création d'une nouvelle plateforme
-                max(
-                    self.player.position.x + 
-                    WIDTH * (len(self.platforms) / 3),
-                    WIDTH
-                ),
+                randint(WIDTH, WIDTH * 2),
                 randint(
                     min(
                         int(self.player.position.y + PLATFORM_HEIGHT),
