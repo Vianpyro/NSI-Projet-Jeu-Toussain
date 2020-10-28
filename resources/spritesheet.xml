@@ -1,0 +1,10 @@
+<TextureAtlas imagePath="mario.png">
+    <SubTexture name="walk_left_1.png" x="0" y="0" width="15" height="27"/>
+    <SubTexture name="walk_left_2.png" x="20" y="0" width="15" height="26"/>
+    <SubTexture name="back.png" x="40" y="0" width="16" height="27"/>
+    <SubTexture name="front.png" x="60" y="0" width="16" height="27"/>
+    <SubTexture name="standing_left.png" x="81" y="0" width="13" height="27"/>
+    <SubTexture name="standing_right.png" x="100" y="0" width="13" height="27"/>
+    <SubTexture name="walk_right_1.png" x="180" y="0" width="15" height="26"/>
+    <SubTexture name="walk_right_2.png" x="160" y="0" width="15" height="27"/>
+</TextureAtlas>

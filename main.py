@@ -1,9 +1,16 @@
+#!/usr/bin/env python
+# -*- coding: utf8 -*-
 from settings import *
 from sprites import *
 import pygame as pg
 from random import randint
-from os import environ
+from os import environ, path
 import sys
+
+
+if __name__ != "__main__":
+    quit()
+
 
 class Game:
     def __init__(self):
@@ -16,7 +23,7 @@ class Game:
         self.window = pg.display.set_mode((WIDTH, HEIGHT))      # Affichage de la fenêtre
         self.clock = pg.time.Clock()                            # Définition du chronomètre (pour suivre la fluidité du jeu)
         self.font_name = pg.font.match_font(FONT_NAME)          # Paramêtrage du font (style d'écriture)
-        self.load_hscore()                                      # Chargement (s'il existe) de l'highscore
+        self.load_data()                                        # Chargement des données
         self.running = True                                     # Comprend que le jeu est lancé
 
     def new(self):
@@ -26,7 +33,7 @@ class Game:
         self.all_sprites = pg.sprite.Group()                    # Création d'un groupe contenant toutes les instances d'entitées
         self.platforms = pg.sprite.Group()                      # Création d'un groupe contenant toues les platformes
         self.player = Player(self)                              # Création du joueur
-        p1 = Platform(0, HEIGHT - 25, WIDTH, 25)                # Création de la platforme initiale
+        p1 = Platform(self, 0, HEIGHT - 25, WIDTH, 25)          # Création de la platforme initiale
         self.all_sprites.add(self.player)                       # Ajout du joueur dans le groupe d'objets
         self.all_sprites.add(p1)                                # Ajout de la platforme initale dans le groupe d'entitées
         self.platforms.add(p1)                                  # Ajout de la platforme initale dans le groupe de platformes
@@ -69,7 +76,8 @@ class Game:
 
         # Apparition de nouvelles plateformes
         while len(self.platforms) <= 10:
-            p = Platform(                                                   # Création d'une nouvelle plateforme
+            p = Platform(
+                self,                                                       # Création d'une nouvelle plateforme
                 randint(WIDTH, WIDTH * 2),                                  # Coordonée sur l'axe des abscisses
                 randint(                                                    # Coordonée sur l'axe des ordonnées
                     min(
@@ -106,7 +114,7 @@ class Game:
         """
         Affichage de ce qui est a afficher
         """
-        self.window.fill(BACKGROUD_COLOR)                                 # Remplie tout l'écran de noir pour repartir d'une image de base
+        self.window.fill(BACKGROUD_COLOR)                       # Remplie tout l'écran de noir pour repartir d'une image de base
         self.draw_text(                                         # Affichage du score
             f"Score : {max(self.score, 0)}",
             PLATFORM_HEIGHT, WHITE,
@@ -193,12 +201,24 @@ class Game:
                 if event.type == pg.KEYDOWN:                            # Fin de l'attente quand le joueur appuie sur une touche (sauf esc)
                     return
 
-    def load_hscore(self):                                      # Chargement de l'highscore
+    def load_data(self):                                        # Chargement des données
+        self.directory = path.dirname(__file__)                 # Sauvegarde du répertoir du jeu
+        img_directory = path.join(                              # Entrée dans le dossier de ressources
+            self.directory, 'resources'
+        )
+
+        # Chargement de l'highscore
         try:
-            with open(SAVE_NAME, 'r') as f:                      # On essaye d'ouvrir le fichier
+            with open(SAVE_NAME, 'r') as f:                     # On essaye d'ouvrir le fichier de l'highscore
                 try: self.highscore = int(f.read())             # On prend l'highscore
                 except: self.highscore = 0                      # Ou on prend 0
         except: self.highscore = 0                              # Si le fichier est introuvable on prend 0
+
+        self.spritesheet = Spritesheet(path.join(               # Chargement du spritesheet du joueur
+            img_directory, SPRITESHEET
+        ))
+
+
 
 game = Game()                                                   # Création de l'instance game
 game.show_start_screen()                                        # Affichage de l'écran de départ
@@ -208,3 +228,4 @@ while game.running:
     if game.running: game.show_game_over_screen()               # Affichage de l'écran de fin
 
 pg.quit()                                                       # Fermeture de la fenêtre
+quit()                                                          # Fermeture du programme

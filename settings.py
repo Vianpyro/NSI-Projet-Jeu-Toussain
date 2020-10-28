@@ -1,5 +1,11 @@
-# Fichier de sauvegarde
+#!/usr/bin/env python
+# -*- coding: utf8 -*-
+if __name__ == "__main__":
+    quit()
+
+# Fichiers (Images libres de droit)
 SAVE_NAME = 'hscore'
+SPRITESHEET = 'spritesheet.png'
 
 # Paramètres d'affichage
 FPS = 60
