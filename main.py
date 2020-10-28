@@ -66,7 +66,9 @@ class Game:
             self.playing = False                                            # Arrêt de la partie
 
         if self.player.position.x >= (2 * WIDTH) / 3:                       # Test si le joueur est a 2/3 de l'écran
-            player_velocity = abs(self.player.velocity.x)                   # Sauvegarde la valeur absolue de la vélocité du joueur
+            player_velocity = max(                                          # Sauvegarde du maximum entre la valeur absolue de la vélocité du joueur et "2"...
+                abs(self.player.velocity.x), 2                              # ...pour bouger la camera quand le joueur passe par la gauche de l'écran
+            )
             self.player.position.x -= player_velocity                       # Ajoute cette valeur a la "camera" pour avancer fluidement 
             for p in self.platforms:                                        # Vérification de chaque plateforme
                 p.rect.x -= int(player_velocity)                            # Déplacement fluide de la plateforme
