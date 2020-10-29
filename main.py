@@ -2,7 +2,6 @@
 # -*- coding: utf8 -*-
 from settings import *
 from sprites import *
-import pygame as pg
 from random import randint
 from os import environ, path
 import sys
@@ -11,6 +10,9 @@ import sys
 if __name__ != "__main__":
     quit()
 
+# Tentative de chargement de la librairie Pygame, retourne un message d'erreur dans le cas contraire
+try: import pygame as pg
+except: input("Unable to load the Pygame library, please check that it is properly installed on this computer...")
 
 class Game:
     def __init__(self):
