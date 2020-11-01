@@ -20,6 +20,7 @@ class Game:
         Initialisation de la fenêtre du jeu:
         """
         pg.init()                                               # Initialisation de Pygame
+        pg.mixer.init()                                         # Initialisation du son de Pygame
         environ["SDL_VIDEO_CENTERED"] = '1'                     # Centrage de la fenêtre
         pg.display.set_caption(GAME_TITLE)                      # Titrage de la fenêtre
         self.window = pg.display.set_mode((WIDTH, HEIGHT))      # Affichage de la fenêtre
@@ -33,13 +34,17 @@ class Game:
         Création d'une nouvelle partie
         """
         self.all_sprites = pg.sprite.Group()                    # Création d'un groupe contenant toutes les instances d'entitées
-        self.platforms = pg.sprite.Group()                      # Création d'un groupe contenant toues les platformes
+        self.platforms = pg.sprite.Group()                      # Création d'un groupe contenant toutes les platformes
+        self.clouds = pg.sprite.Group()                         # Création d'un groupe contenant tous les nuages
         self.player = Player(self)                              # Création du joueur
         p1 = Platform(self, 0, HEIGHT - 25, WIDTH, 25)          # Création de la platforme initiale
         self.all_sprites.add(self.player)                       # Ajout du joueur dans le groupe d'objets
         self.all_sprites.add(p1)                                # Ajout de la platforme initale dans le groupe d'entitées
         self.platforms.add(p1)                                  # Ajout de la platforme initale dans le groupe de platformes
         self.score = -WIDTH                                     # Création du compteur de points (initialisé a -WIDTH : la première platforme)
+        pg.mixer.music.load(path.join(
+            self.snd_directory, 'HAPPY_VICTORY! By HeatleyBros.mp3'
+        ))
         self.run()                                              # Lancement de la partie
 
     def run(self):
@@ -47,36 +52,46 @@ class Game:
         Execution des differentes fonctions nécessaires au fonctionnement du jeu
         C'est ici qu'est située la boucle principale de la partie !
         """
+        pg.mixer.music.set_volume(0.1)
+        pg.mixer.music.play(loops=-1)
         self.playing = True
         while self.playing:
             self.clock.tick(FPS)                                # Limite l'affichage d'ips (fps) selon les réglages
             self.events()                                       # Écoute les evenements
             self.update()                                       # Met a jour les données du jeu
             self.draw()                                         # Affiche les données du jeu
+        pg.mixer.music.fadeout(100)
     
     def update(self):
         """
         Met a jour tout ce qui est affiché (mouvement, apparence etc...)
         """
         self.all_sprites.update()                                           # Met a jour les instances d'objets
-        hits = pg.sprite.spritecollide(self.player, self.platforms, False)  # Detecte la collision entre le joueur et les plateformes (False = sans les supprimer)
-        if hits:
-            self.player.position.y = hits[0].rect.top                       # Remet de joueur au dessus de la platforme touchée
-            self.player.velocity.y = 0                                      # Réinitialise l'effet de la gravité sur le joueur
+        
+        # Apparition de nuages en font d'ecran
+        while len(self.clouds) <= 3:
+            c = Cloud(
+                self,
+                randint(WIDTH, WIDTH * 2),
+                randint(0, int(HEIGHT // 3)),
+                randint(PLATFORM_HEIGHT * 5, PLATFORM_HEIGHT * 7),
+                randint(PLATFORM_HEIGHT * 3, PLATFORM_HEIGHT * 5)
+            )
 
-        if self.player.position.y >= HEIGHT + PLATFORM_HEIGHT:              # Test pour voir si le joueur est tombé des platformes
-            self.playing = False                                            # Arrêt de la partie
+            pg.sprite.spritecollide(c, self.clouds, True)                   # On supprime le(s) nuage(s) touché(s) par le nouveau nuage
+            self.clouds.add(c)
+            self.all_sprites.add(c)
 
         if self.player.position.x >= (2 * WIDTH) / 3:                       # Test si le joueur est a 2/3 de l'écran
             player_velocity = max(                                          # Sauvegarde du maximum entre la valeur absolue de la vélocité du joueur et "2"...
                 abs(self.player.velocity.x), 2                              # ...pour bouger la camera quand le joueur passe par la gauche de l'écran
             )
             self.player.position.x -= player_velocity                       # Ajoute cette valeur a la "camera" pour avancer fluidement 
-            for p in self.platforms:                                        # Vérification de chaque plateforme
-                p.rect.x -= int(player_velocity)                            # Déplacement fluide de la plateforme
-                if p.rect.right <= 0:                                       # Si elle est en dehors du champ de vision on la supprime
-                    self.score += p.width
-                    p.kill()
+            for p in self.platforms:                                        # Déplacement fluide des plateformes
+                p.rect.x -= int(player_velocity)
+            for c in self.clouds:
+                c.rect.x -= int(player_velocity / 2)                        # Déplacement "fluide" des nuages
+        
 
         # Apparition de nouvelles plateformes
         while len(self.platforms) <= 10:
@@ -119,12 +134,12 @@ class Game:
         Affichage de ce qui est a afficher
         """
         self.window.fill(BACKGROUD_COLOR)                       # Remplie tout l'écran de noir pour repartir d'une image de base
+        self.all_sprites.draw(self.window)                      # "Dessine" tout ce qui doit être affiché
         self.draw_text(                                         # Affichage du score
             f"Score : {max(self.score, 0)}",
-            PLATFORM_HEIGHT, WHITE,
+            PLATFORM_HEIGHT, GREEN,
             WIDTH / 2, PLATFORM_HEIGHT * 2
         )
-        self.all_sprites.draw(self.window)                      # "Dessine" tout ce qui doit être affiché
         pg.display.flip()                                       # Ne change que ce qui a "bougé" entre deux images (frames) pour les fps
 
     def draw_text(self, text, size, color, x, y):
@@ -208,8 +223,17 @@ class Game:
     def load_data(self):                                        # Chargement des données
         self.directory = path.dirname(__file__)                 # Sauvegarde du répertoir du jeu
         img_directory = path.join(                              # Entrée dans le dossier de ressources
-            self.directory, 'resources'
+            self.directory, 'images'
         )
+        self.snd_directory = path.join(
+            self.directory, 'sounds'
+        )
+        self.jump_sound = pg.mixer.Sound(path.join(
+            self.snd_directory, 'jump.mp3'
+        ))
+        self.death_sound = pg.mixer.Sound(path.join(
+            self.snd_directory, 'death.mp3'
+        ))
 
         # Chargement de l'highscore
         try:
