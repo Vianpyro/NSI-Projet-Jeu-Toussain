@@ -42,9 +42,12 @@ class Game:
         self.all_sprites.add(p1)                                # Ajout de la platforme initale dans le groupe d'entitées
         self.platforms.add(p1)                                  # Ajout de la platforme initale dans le groupe de platformes
         self.score = -WIDTH                                     # Création du compteur de points (initialisé a -WIDTH : la première platforme)
-        pg.mixer.music.load(path.join(
-            self.snd_directory, 'HAPPY_VICTORY! By HeatleyBros.mp3'
-        ))
+        try:
+            pg.mixer.music.load(path.join(
+                self.snd_directory, 'HAPPY_VICTORY! By HeatleyBros.mp3'
+            ))
+        except:
+            print('Impossible de charger la musique...')
         self.run()                                              # Lancement de la partie
 
     def run(self):
@@ -52,15 +55,18 @@ class Game:
         Execution des differentes fonctions nécessaires au fonctionnement du jeu
         C'est ici qu'est située la boucle principale de la partie !
         """
-        pg.mixer.music.set_volume(0.1)
-        pg.mixer.music.play(loops=-1)
+        try:
+            pg.mixer.music.set_volume(0.1)
+            pg.mixer.music.play(loops=-1)
+        except: pass
         self.playing = True
         while self.playing:
             self.clock.tick(FPS)                                # Limite l'affichage d'ips (fps) selon les réglages
             self.events()                                       # Écoute les evenements
             self.update()                                       # Met a jour les données du jeu
             self.draw()                                         # Affiche les données du jeu
-        pg.mixer.music.fadeout(100)
+        try: pg.mixer.music.fadeout(100)
+        except: pass
     
     def update(self):
         """
@@ -225,15 +231,18 @@ class Game:
         img_directory = path.join(                              # Entrée dans le dossier de ressources
             self.directory, 'images'
         )
-        self.snd_directory = path.join(
-            self.directory, 'sounds'
-        )
-        self.jump_sound = pg.mixer.Sound(path.join(
-            self.snd_directory, 'jump.mp3'
-        ))
-        self.death_sound = pg.mixer.Sound(path.join(
-            self.snd_directory, 'death.mp3'
-        ))
+        try:
+            self.snd_directory = path.join(
+                self.directory, 'sounds'
+            )
+            self.jump_sound = pg.mixer.Sound(path.join(
+                self.snd_directory, 'jump.mp3'
+            ))
+            self.death_sound = pg.mixer.Sound(path.join(
+                self.snd_directory, 'death.mp3'
+            ))
+        except:
+            print('Impossible de charger les sons du jeu...')
 
         # Chargement de l'highscore
         try:
