@@ -42,8 +42,9 @@ class Player(pg.sprite.Sprite):                     # Création de la classe jou
     def update(self):
         self.acceleration = vec(0, GRAVITY)                              # A chaque update (frame) on remet l'acceleration laterale a 0 et on ajoute la gravite
         if self.position.y >= HEIGHT + PLATFORM_HEIGHT:                  # Test pour voir si le joueur est tombé des platformes
-            self.game.death_sound.play()
             self.game.playing = False                                    # Arrêt de la partie
+            try: self.game.death_sound.play()
+            except: pass
 
         hits = pg.sprite.spritecollide(self, self.game.platforms, False) # Vérification que le joueur est bien sur une platforme
         keys = pg.key.get_pressed()                                      # Sauvegarde de touches enfoncées par le joueur dans une liste (type set)
@@ -53,7 +54,8 @@ class Player(pg.sprite.Sprite):                     # Création de la classe jou
             self.velocity.y = 0                                      # Réinitialise l'effet de la gravité sur le joueur
             if keys[pg.K_SPACE] or keys[pg.K_UP] or keys[pg.K_w]:
                 self.velocity.y = -PLAYER_JUMP * (1 - GRAVITY)       # On saute si le joueur appuie sur une touche et est en contact avec une platforme
-                self.game.jump_sound.play()
+                try: self.game.jump_sound.play()
+                except: pass
 
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.acceleration.x = -PLAYER_ACCELERATION
