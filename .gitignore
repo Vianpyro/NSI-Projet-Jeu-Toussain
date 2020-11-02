@@ -1,5 +1,6 @@
-# Highscore file
+# Files
 hscore
+*.zip
 
 # VSCode folder
 .vscode

@@ -4,7 +4,6 @@ from settings import *
 from sprites import *
 from random import randint
 from os import environ, path
-import sys
 
 
 if __name__ != "__main__":
