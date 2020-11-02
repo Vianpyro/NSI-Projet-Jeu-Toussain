@@ -44,7 +44,7 @@ class Game:
         self.score = -WIDTH                                     # Création du compteur de points (initialisé a -WIDTH : la première platforme)
         try:
             pg.mixer.music.load(path.join(
-                self.snd_directory, 'HAPPY_VICTORY! By HeatleyBros.mp3'
+                self.snd_directory, 'HAPPY_VICTORY! By HeatleyBros.ogg'
             ))
         except:
             print('Impossible de charger la musique...')
@@ -236,10 +236,10 @@ class Game:
                 self.directory, 'sounds'
             )
             self.jump_sound = pg.mixer.Sound(path.join(
-                self.snd_directory, 'jump.mp3'
+                self.snd_directory, 'jump.ogg'
             ))
             self.death_sound = pg.mixer.Sound(path.join(
-                self.snd_directory, 'death.mp3'
+                self.snd_directory, 'death.ogg'
             ))
         except:
             print('Impossible de charger les sons du jeu...')
