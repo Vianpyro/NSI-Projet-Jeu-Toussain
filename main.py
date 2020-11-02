@@ -42,12 +42,9 @@ class Game:
         self.all_sprites.add(p1)                                # Ajout de la platforme initale dans le groupe d'entitées
         self.platforms.add(p1)                                  # Ajout de la platforme initale dans le groupe de platformes
         self.score = -WIDTH                                     # Création du compteur de points (initialisé a -WIDTH : la première platforme)
-        try:
-            pg.mixer.music.load(path.join(
-                self.snd_directory, 'HAPPY_VICTORY! By HeatleyBros.ogg'
-            ))
-        except:
-            print('Impossible de charger la musique...')
+        pg.mixer.music.load(path.join(
+            self.snd_directory, 'HAPPY_VICTORY! By HeatleyBros.ogg'
+        ))
         self.run()                                              # Lancement de la partie
 
     def run(self):
@@ -55,18 +52,15 @@ class Game:
         Execution des differentes fonctions nécessaires au fonctionnement du jeu
         C'est ici qu'est située la boucle principale de la partie !
         """
-        try:
-            pg.mixer.music.set_volume(0.1)
-            pg.mixer.music.play(loops=-1)
-        except: pass
+        pg.mixer.music.set_volume(0.1)
+        pg.mixer.music.play(loops=-1)
         self.playing = True
         while self.playing:
             self.clock.tick(FPS)                                # Limite l'affichage d'ips (fps) selon les réglages
             self.events()                                       # Écoute les evenements
             self.update()                                       # Met a jour les données du jeu
             self.draw()                                         # Affiche les données du jeu
-        try: pg.mixer.music.fadeout(100)
-        except: pass
+        pg.mixer.music.fadeout(100)
     
     def update(self):
         """
@@ -181,7 +175,13 @@ class Game:
             WHITE, WIDTH / 2, (HEIGHT / 4) * 3
         )
         pg.display.flip()                                               # Flip pour afficher ce qui est a afficher
+        pg.mixer.music.load(path.join(
+            self.snd_directory, 'Mii.ogg'
+        ))
+        pg.mixer.music.set_volume(0.1)
+        pg.mixer.music.play(loops=-1)
         self.wait_for_key()                                             # Attente qu'une touche soit pressée pour finir la fonction
+        pg.mixer.music.fadeout(100)
 
     def show_game_over_screen(self):
         self.window.fill(BACKGROUD_COLOR)
@@ -210,8 +210,14 @@ class Game:
             )
 
         pg.display.flip()                                               # Flip pour afficher ce qui est a afficher
-        self.wait_for_key()                                             # Attente qu'une touche soit pressée pour finir la fonction
-
+        pg.mixer.music.load(path.join(
+            self.snd_directory, 'Mii.ogg'
+        ))
+        pg.mixer.music.set_volume(0.1)
+        pg.mixer.music.play(loops=-1)
+        # Attente qu'une touche soit pressée pour finir la fonction
+        self.wait_for_key()
+        pg.mixer.music.fadeout(100)
 
     def wait_for_key(self):                                             # Définition de la fonction d'attente qu'une touche soit pressée
         while True:
@@ -231,18 +237,15 @@ class Game:
         img_directory = path.join(                              # Entrée dans le dossier de ressources
             self.directory, 'images'
         )
-        try:
-            self.snd_directory = path.join(
-                self.directory, 'sounds'
-            )
-            self.jump_sound = pg.mixer.Sound(path.join(
-                self.snd_directory, 'jump.ogg'
-            ))
-            self.death_sound = pg.mixer.Sound(path.join(
-                self.snd_directory, 'death.ogg'
-            ))
-        except:
-            print('Impossible de charger les sons du jeu...')
+        self.snd_directory = path.join(
+            self.directory, 'sounds'
+        )
+        self.jump_sound = pg.mixer.Sound(path.join(
+            self.snd_directory, 'jump.ogg'
+        ))
+        self.death_sound = pg.mixer.Sound(path.join(
+            self.snd_directory, 'death.ogg'
+        ))
 
         # Chargement de l'highscore
         try:
