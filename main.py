@@ -137,7 +137,7 @@ class Game:
         self.all_sprites.draw(self.window)                      # "Dessine" tout ce qui doit être affiché
         self.draw_text(                                         # Affichage du score
             f"Score : {max(self.score, 0)}",
-            PLATFORM_HEIGHT, GREEN,
+            PLATFORM_HEIGHT, BLACK,
             WIDTH / 2, PLATFORM_HEIGHT * 2
         )
         pg.display.flip()                                       # Ne change que ce qui a "bougé" entre deux images (frames) pour les fps
