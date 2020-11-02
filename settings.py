@@ -28,6 +28,7 @@ LIGHT_GRAY = (150, 150, 150)
 # Paramètres du jeu
 GRAVITY = 0.5
 PLATFORM_HEIGHT = 25
+PLATFORM_MAX_WIDTH = PLATFORM_HEIGHT * 3
 
 # Paramètres du joueur
 PLAYER_JUMP = 25

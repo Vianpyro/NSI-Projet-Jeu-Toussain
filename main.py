@@ -40,7 +40,7 @@ class Game:
         self.all_sprites.add(self.player)                       # Ajout du joueur dans le groupe d'objets
         self.all_sprites.add(p1)                                # Ajout de la platforme initale dans le groupe d'entitées
         self.platforms.add(p1)                                  # Ajout de la platforme initale dans le groupe de platformes
-        self.score = -WIDTH                                     # Création du compteur de points (initialisé a -WIDTH : la première platforme)
+        self.score = 0                                          # Création du compteur de points (initialisé a -WIDTH : la première platforme)
         pg.mixer.music.load(path.join(
             self.snd_directory, 'HAPPY_VICTORY! By HeatleyBros.ogg'
         ))
@@ -108,7 +108,7 @@ class Game:
                     )
                 ),
                 randint(                                                    
-                    PLATFORM_HEIGHT * 2, PLATFORM_HEIGHT * 3),              # Longeur maximum de la platforme
+                    PLATFORM_HEIGHT * 2, PLATFORM_MAX_WIDTH),               # Longeur maximum de la platforme
                 PLATFORM_HEIGHT                                             # Largeur de la platforme
             )
 
@@ -135,7 +135,7 @@ class Game:
         self.window.fill(BACKGROUD_COLOR)                       # Remplie tout l'écran de noir pour repartir d'une image de base
         self.all_sprites.draw(self.window)                      # "Dessine" tout ce qui doit être affiché
         self.draw_text(                                         # Affichage du score
-            f"Score : {max(self.score, 0)}",
+            f"Score : {self.score}",
             PLATFORM_HEIGHT, BLACK,
             WIDTH / 2, PLATFORM_HEIGHT * 2
         )

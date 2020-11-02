@@ -90,8 +90,9 @@ class Platform(pg.sprite.Sprite):
         self.rect.y = y                                     # Définition de l'ordonnée de l'objet
 
     def update(self):
-        if self.rect.right < 0:                             # Si la platforme sort du cadre on la supprime
-            self.game.score += self.width
+        if self.rect.right < 0:                                 # Si la platforme sort du cadre on la supprime
+            if self.width != WIDTH:
+                self.game.score += PLATFORM_MAX_WIDTH - self.width
             self.kill()
 
 class Cloud(pg.sprite.Sprite):
