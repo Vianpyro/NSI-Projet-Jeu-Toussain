@@ -5,9 +5,8 @@ from sprites import *
 from random import randint
 from os import environ, path
 
-
-if __name__ != "__main__":
-    quit()
+if __name__ == "__main__": from updater import *
+else: quit()
 
 # Tentative de chargement de la librairie Pygame, retourne un message d'erreur dans le cas contraire
 try: import pygame as pg
