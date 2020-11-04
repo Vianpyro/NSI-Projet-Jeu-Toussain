@@ -14,8 +14,11 @@ data = loads(resp.read())
 version = data['html_url'].split('/')[-1]
 
 # Download the latest version
-if not path.exists(f'{version}.zip'):
+if path.exists(f'{version}.zip'):
+    input(f'You have already downloaded version {version[1:]}!')
+else:
     dlurl.urlretrieve(
         f'https://github.com/Vianpyro/NSI-saints-days-game-project/archive/{version}.zip', 
         f'{version}.zip'
     )
+    input(f'Version {version[1:]} successfully downloaded.')
