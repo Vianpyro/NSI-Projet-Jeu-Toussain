@@ -68,13 +68,13 @@ class Game:
         self.all_sprites.update()                                           # Met a jour les instances d'objets
         
         # Apparition de nuages en font d'ecran
-        while len(self.clouds) <= 3:
+        while len(self.clouds) <= 2:
             c = Cloud(
                 self,
                 randint(WIDTH, WIDTH * 2),
-                randint(0, int(HEIGHT // 3)),
-                randint(PLATFORM_HEIGHT * 5, PLATFORM_HEIGHT * 7),
-                randint(PLATFORM_HEIGHT * 3, PLATFORM_HEIGHT * 5)
+                randint(0, int(HEIGHT / 4)),
+                randint(PLATFORM_HEIGHT * 4, PLATFORM_HEIGHT * 6),
+                randint(PLATFORM_HEIGHT * 2, PLATFORM_HEIGHT * 4)
             )
 
             pg.sprite.spritecollide(c, self.clouds, True)                   # On supprime le(s) nuage(s) touché(s) par le nouveau nuage
@@ -93,20 +93,11 @@ class Game:
         
 
         # Apparition de nouvelles plateformes
-        while len(self.platforms) <= 10:
+        while len(self.platforms) <= PLATFORMS:
             p = Platform(
                 self,                                                       # Création d'une nouvelle plateforme
-                randint(WIDTH, WIDTH * 2),                                  # Coordonée sur l'axe des abscisses
-                randint(                                                    # Coordonée sur l'axe des ordonnées
-                    min(
-                        int(self.player.position.y + PLATFORM_HEIGHT),
-                        HEIGHT - PLATFORM_HEIGHT
-                    ),
-                    max(
-                        int(self.player.position.y - PLATFORM_HEIGHT),
-                        HEIGHT - PLATFORM_HEIGHT
-                    )
-                ),
+                randint(WIDTH, WIDTH * int(PLATFORMS / 7.5)),                                  # Coordonée sur l'axe des abscisses
+                randint(int((HEIGHT / 3) * 2), HEIGHT - PLATFORM_HEIGHT),   # Coordonée sur l'axe des ordonnées
                 randint(                                                    
                     PLATFORM_HEIGHT * 2, PLATFORM_MAX_WIDTH),               # Longeur maximum de la platforme
                 PLATFORM_HEIGHT                                             # Largeur de la platforme
