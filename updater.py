@@ -2,6 +2,7 @@
 import urllib.request as dlurl
 from os import path
 from json import loads
+import zipfile
 
 # Get latest released version
 try: resp = dlurl.urlopen('https://api.github.com/repos/Vianpyro/NSI-saints-days-game-project/releases/latest')
@@ -23,6 +24,12 @@ else:
             f'{version}.zip'
         )
         print(f'Version {version[1:]} successfully downloaded.')
+
+        if not path.exists(f'NSI-saints-days-game-project-{version[1:]}'):
+            print(f'Extracting {version}...')
+            with zipfile.ZipFile(f'{version}.zip', 'r') as zipf:
+                zipf.extractall()
+                zipf.close()
     else:
         print(f"Une nouvelle version est peut être disponible : {version[1:]}, utilisez l'updater pour télécharger la dernière version!")
         print(f'A new version may be available: {version[1:]}, use the updater to download the latest version!')
