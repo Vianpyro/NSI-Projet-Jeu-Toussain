@@ -1,6 +1,8 @@
 # Files
 hscore
 *.zip
+Python-Updater-*
+NSI-saints-days-game-project-*
 
 # VSCode folder
 .vscode
