@@ -14,6 +14,8 @@ HEIGHT = 480
 GAME_TITLE = "Cloud Jumper"
 FONT_NAME = "calibri"
 BACKGROUD_COLOR = (0, 200, 255)
+PLATFORM_LAYER = 1
+PLAYER_LAYER = 2
 
 # Définition de couleurs
 WHITE = (255, 255, 255)

@@ -31,7 +31,7 @@ class Game:
         """
         Création d'une nouvelle partie
         """
-        self.all_sprites = pg.sprite.Group()                    # Création d'un groupe contenant toutes les instances d'entitées
+        self.all_sprites = pg.sprite.LayeredUpdates()           # Création d'un groupe contenant toutes les instances d'entitées
         self.platforms = pg.sprite.Group()                      # Création d'un groupe contenant toutes les platformes
         self.clouds = pg.sprite.Group()                         # Création d'un groupe contenant tous les nuages
         self.player = Player(self)                              # Création du joueur

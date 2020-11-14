@@ -33,6 +33,7 @@ class Spritesheet:                                  # Création de la classe Spr
 
 class Player(pg.sprite.Sprite):                     # Création de la classe joueur "enfant" de "sprite"
     def __init__(self, game):
+        self._layer = PLAYER_LAYER
         pg.sprite.Sprite.__init__(self)                     # Initialisation de la classe superieur "sprite"
         self.game = game                                    # Sauvegarde du jeu aquel "appartient" le joueur
         self.load_images()
@@ -174,6 +175,7 @@ class Player(pg.sprite.Sprite):                     # Création de la classe jou
 
 class Platform(pg.sprite.Sprite):
     def __init__(self, game, x, y, width, height):
+        self._layer = PLATFORM_LAYER
         pg.sprite.Sprite.__init__(self)                     # Initialisation de la classe superieur "sprite"
         self.game = game
         self.width = width                                  # Sauvegarde de la largeur de la platforme
@@ -196,6 +198,7 @@ class Platform(pg.sprite.Sprite):
 
 class Cloud(pg.sprite.Sprite):
     def __init__(self, game, x, y, width, height):
+        self._layer = PLATFORM_LAYER
         pg.sprite.Sprite.__init__(self)                     # Initialisation de la classe superieur "sprite"
         self.game = game
         self.width = width                                  # Sauvegarde de la largeur de la platforme

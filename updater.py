@@ -64,10 +64,10 @@ for i in range(len(parameters)):
                         print(
                             f'Could not extract {name}.'
                         )
-            else:
-                print(
-                    f'A new version of {parameters[i][2]}/{parameters[i][3]} may be available: {name}.'
-                )
+                else:
+                    print(
+                        f'A new version of {parameters[i][2]}/{parameters[i][3]} may be available: {name}.'
+                    )
         except: 
             print(
                 f'Unable to locate package: "{source_website}/repos/{parameters[i][2]}/{parameters[i][3]}/releases/latest"...'
