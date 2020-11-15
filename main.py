@@ -68,7 +68,7 @@ class Game:
         """
         self.all_sprites.update()                                           # Met a jour les instances d'objets
         x1 = WIDTH
-        if self.score <= 0: x1 = int(WIDTH / 4 * 3)
+        if self.score + len(self.platforms) <= 1: x1 = int(WIDTH / 4 * 3)
         
         # Apparition de nuages en font d'ecran
         while len(self.clouds) < 2:
