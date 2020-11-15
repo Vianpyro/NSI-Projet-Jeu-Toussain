@@ -35,11 +35,13 @@ class Game:
         self.platforms = pg.sprite.Group()                      # Création d'un groupe contenant toutes les platformes
         self.clouds = pg.sprite.Group()                         # Création d'un groupe contenant tous les nuages
         self.player = Player(self)                              # Création du joueur
-        p1 = Platform(self, 0, HEIGHT - 25, WIDTH, 25)          # Création de la platforme initiale
+        p1 = Platform(                                          # Création de la platforme initiale
+            self, 0, HEIGHT - 25, WIDTH // 7 * 5, 25, True
+        )
         self.all_sprites.add(self.player)                       # Ajout du joueur dans le groupe d'objets
         self.all_sprites.add(p1)                                # Ajout de la platforme initale dans le groupe d'entitées
         self.platforms.add(p1)                                  # Ajout de la platforme initale dans le groupe de platformes
-        self.score = 0                                          # Création du compteur de points (initialisé a -WIDTH : la première platforme)
+        self.score = 0                                          # Création du compteur de points
         pg.mixer.music.load(path.join(
             self.snd_directory, 'HAPPY_VICTORY! By HeatleyBros.ogg'
         ))
@@ -65,12 +67,14 @@ class Game:
         Met a jour tout ce qui est affiché (mouvement, apparence etc...)
         """
         self.all_sprites.update()                                           # Met a jour les instances d'objets
+        x1 = WIDTH
+        if self.score <= 0: x1 = int(WIDTH / 4 * 3)
         
         # Apparition de nuages en font d'ecran
-        while len(self.clouds) <= 2:
+        while len(self.clouds) < 2:
             c = Cloud(
                 self,
-                randint(WIDTH, WIDTH * 2),
+                randint(x1, WIDTH * 2),
                 randint(0, int(HEIGHT / 4)),
                 randint(PLATFORM_HEIGHT * 4, PLATFORM_HEIGHT * 6),
                 randint(PLATFORM_HEIGHT * 2, PLATFORM_HEIGHT * 4)
@@ -80,7 +84,7 @@ class Game:
             self.clouds.add(c)
             self.all_sprites.add(c)
 
-        if self.player.position.x >= (2 * WIDTH) / 3:                       # Test si le joueur est a 2/3 de l'écran
+        if self.player.position.x >= CAMERA_POSITION:                       # Test si le joueur est a 2/3 de l'écran
             player_velocity = max(                                          # Sauvegarde du maximum entre la valeur absolue de la vélocité du joueur et "2"...
                 abs(self.player.velocity.x), 2                              # ...pour bouger la camera quand le joueur passe par la gauche de l'écran
             )
@@ -92,10 +96,10 @@ class Game:
         
 
         # Apparition de nouvelles plateformes
-        while len(self.platforms) <= PLATFORMS:
+        while len(self.platforms) < PLATFORMS:
             p = Platform(
                 self,                                                       # Création d'une nouvelle plateforme
-                randint(WIDTH, WIDTH * int(PLATFORMS / 7.5)),                                  # Coordonée sur l'axe des abscisses
+                randint(x1, WIDTH * int(PLATFORMS / 7.5)),                  # Coordonée sur l'axe des abscisses
                 randint(int((HEIGHT / 3) * 2), HEIGHT - PLATFORM_HEIGHT),   # Coordonée sur l'axe des ordonnées
                 randint(                                                    
                     PLATFORM_HEIGHT * 2, PLATFORM_MAX_WIDTH),               # Longeur maximum de la platforme

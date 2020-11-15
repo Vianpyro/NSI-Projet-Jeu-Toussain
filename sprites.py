@@ -174,11 +174,12 @@ class Player(pg.sprite.Sprite):                     # Création de la classe jou
 
 
 class Platform(pg.sprite.Sprite):
-    def __init__(self, game, x, y, width, height):
+    def __init__(self, game, x, y, width, height, first_platform=False):
         self._layer = PLATFORM_LAYER
         pg.sprite.Sprite.__init__(self)                     # Initialisation de la classe superieur "sprite"
         self.game = game
         self.width = width                                  # Sauvegarde de la largeur de la platforme
+        self.first_platform = first_platform
         self.image = self.game.spritesheet.get_sub_image(   # Définition de l'apparence de mon objet (Platform)
             0, 58, 195, 45
         )
@@ -191,8 +192,8 @@ class Platform(pg.sprite.Sprite):
         self.rect.y = y                                     # Définition de l'ordonnée de l'objet
 
     def update(self):
-        if self.rect.right < 0:                                 # Si la platforme sort du cadre on la supprime
-            if self.width != WIDTH:
+        if self.rect.right < 0:                             # Si la platforme sort du cadre on la supprime
+            if not self.first_platform:
                 self.game.score += PLATFORM_MAX_WIDTH - self.width
             self.kill()
 

@@ -16,6 +16,7 @@ FONT_NAME = "calibri"
 BACKGROUD_COLOR = (0, 200, 255)
 PLATFORM_LAYER = 1
 PLAYER_LAYER = 2
+CAMERA_POSITION = int(WIDTH / 11 * 7)
 
 # Définition de couleurs
 WHITE = (255, 255, 255)
