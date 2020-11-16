@@ -156,7 +156,7 @@ class Game:
         if not up_to_date or not updater_up_to_date:
             if not up_to_date:
                 self.draw_text(
-                    f'A new version of Cloud Jumper may be available: {latest_version}.',
+                    f'A new version of {GAME_TITLE} may be available: {latest_version}.',
                     20, BLACK, WIDTH / 2, 24
                 )
 
