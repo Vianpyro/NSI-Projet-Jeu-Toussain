@@ -21,6 +21,9 @@ class Game:
         pg.mixer.init()                                         # Initialisation du son de Pygame
         environ["SDL_VIDEO_CENTERED"] = '1'                     # Centrage de la fenêtre
         pg.display.set_caption(GAME_TITLE)                      # Titrage de la fenêtre
+        pg.display.set_icon(                                    # Définition de l'icon de la fenêtre
+            pg.image.load(path.join('images', 'icon.png'))
+        )
         self.window = pg.display.set_mode((WIDTH, HEIGHT))      # Affichage de la fenêtre
         self.clock = pg.time.Clock()                            # Définition du chronomètre (pour suivre la fluidité du jeu)
         self.font_name = pg.font.match_font(FONT_NAME)          # Paramêtrage du font (style d'écriture)
@@ -150,6 +153,24 @@ class Game:
         Fonction affichant l'écran de départ du jeu
         """
         self.window.fill(BACKGROUD_COLOR)                               # Remplissage de la fenêtre en noir
+        if not up_to_date or not updater_up_to_date:
+            if not up_to_date:
+                self.draw_text(
+                    f'A new version of Cloud Jumper may be available: {latest_version}.',
+                    20, BLACK, WIDTH / 2, 24
+                )
+
+            if not updater_up_to_date:
+                self.draw_text(
+                    f'A new version of the updater may be available: {updater_latest_version}.',
+                    20, BLACK, WIDTH / 2, 24 * 2
+                )
+
+            self.draw_text(
+                f'Run the updater to download the latest version.',
+                20, BLACK, WIDTH / 2, 24 * 3
+            )
+
         self.draw_text(GAME_TITLE, 64, WHITE, WIDTH / 2, HEIGHT / 4)    # Affichage du titre du jeu
         self.draw_text(
             "Utilisez les fleches pour bouger !", 32, WHITE, 

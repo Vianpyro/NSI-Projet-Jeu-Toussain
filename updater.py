@@ -18,6 +18,12 @@ updater_auto_download = True
 updater_user = 'Vianpyro'
 updater_repo = 'Python-Updater'
 
+# Program variable (for imports)
+up_to_date = False
+latest_version = ''
+updater_up_to_date = False
+updater_latest_version = ''
+
 # Creation of a list containing the variables in order to be able to process "easily" the link(s) to be processed
 parameters = [
     [auto_update, auto_download, github_user, github_repo],
@@ -35,8 +41,13 @@ for i in range(len(parameters)):
             name = data['name']
             version = data['html_url'].split('/')[-1]
 
+            if parameters[i][3] == updater_repo: updater_latest_version = version
+            else: latest_version = version
+
             if parameters[i][1]:
                 if path.exists(f'{name}.zip') or path.exists(f'{parameters[i][3]}-{version}') or path.exists(f'{parameters[i][3]}-{version[1:]}'):
+                    if parameters[i][3] == updater_repo: updater_up_to_date = True
+                    else: up_to_date = True
                     print(f'{parameters[i][2]}/{parameters[i][3]} is already running on the most recent version: {name}!')
                 elif __name__ == "__main__":
                     try:
@@ -48,8 +59,7 @@ for i in range(len(parameters)):
                         print(f'Downloaded {parameters[i][3]} {name} successfully.')
                     except:
                         print(
-                            'Could not download',
-                            f'{source_website}/{parameters[i][2]}/{parameters[i][3]}/archive/{version}.zip'
+                            f'Could not download {source_website}/{parameters[i][2]}/{parameters[i][3]}/archive/{version}.zip'
                         )
                     
                     try:
