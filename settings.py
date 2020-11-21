@@ -33,7 +33,7 @@ GRAVITY = 0.5
 PLATFORM_HEIGHT = 30
 PLATFORM_MAX_WIDTH = PLATFORM_HEIGHT * 3
 PLATFORMS = 15
-GENERATION = PLATFORMS // 7.5
+GENERATION = 2                              # Platforms/Screen width
 
 # Paramètres du joueur
 PLAYER_JUMP = 25

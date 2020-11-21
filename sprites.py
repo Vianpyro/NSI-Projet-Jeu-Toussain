@@ -148,7 +148,7 @@ class Player(pg.sprite.Sprite):                     # Création de la classe jou
         hits = pg.sprite.spritecollide(self, self.game.platforms, False) # Vérification que le joueur est bien sur une platforme
         keys = pg.key.get_pressed()                                      # Sauvegarde de touches enfoncées par le joueur dans une liste (type set)
 
-        if hits:
+        if hits and self.velocity.y > 0:
             self.position.y = hits[0].rect.top                       # Remet de joueur au dessus de la platforme touchée
             self.velocity.y = 0                                      # Réinitialise l'effet de la gravité sur le joueur
             if keys[pg.K_SPACE] or keys[pg.K_UP] or keys[pg.K_w]:

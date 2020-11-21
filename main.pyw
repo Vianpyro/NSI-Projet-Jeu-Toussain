@@ -102,7 +102,7 @@ class Game:
         while len(self.platforms) < PLATFORMS:
             p = Platform(
                 self,                                                       # Création d'une nouvelle plateforme
-                randint(x1, WIDTH * GENERATION),                  # Coordonée sur l'axe des abscisses
+                randint(x1, WIDTH * GENERATION),                            # Coordonée sur l'axe des abscisses
                 randint(int((HEIGHT / 3) * 2), HEIGHT - PLATFORM_HEIGHT),   # Coordonée sur l'axe des ordonnées
                 randint(                                                    
                     PLATFORM_HEIGHT * 2, PLATFORM_MAX_WIDTH),               # Longeur maximum de la platforme
